@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery HTML Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #00ff41;
+            text-align: center;
+        }
+        .form-group {
+            margin: 20px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #00ff41;
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #00dd35;
+        }
+        .output-section {
+            margin-top: 30px;
+            display: none;
+        }
+        .output-section.active {
+            display: block;
+        }
+        textarea.output {
+            min-height: 300px;
+            background: #f9f9f9;
+            font-family: 'Courier New', monospace;
+            color: #333;
+        }
+        .copy-btn {
+            background: #007bff;
+            color: white;
+            margin-top: 10px;
+        }
+        .copy-btn:hover {
+            background: #0056b3;
+        }
+        .animations {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .info {
+            background: #e7f3ff;
+            border-left: 4px solid #00ff41;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Gallery HTML Generator</h1>
+        
+        <div class="info">
+            <strong>How to use:</strong> Enter the number of images you want, choose animation style, and click "Generate". Copy the HTML code and paste it into your gallery.html file.
+        </div>
+
+        <div class="form-group">
+            <label>Number of Images:</label>
+            <input type="number" id="imageCount" min="1" max="500" value="20" placeholder="e.g., 20, 50, 100">
+        </div>
+
+        <div class="form-group">
+            <label>Starting Image Number:</label>
+            <input type="number" id="startNum" min="1" value="1" placeholder="e.g., 1 (for gallery-1.jpg), 10 (for gallery-10.jpg)">
+        </div>
+
+        <div class="form-group">
+            <label>Image Folder Path:</label>
+            <input type="text" id="imagePath" value="img/gallery/gallery-" placeholder="e.g., img/gallery/gallery-">
+        </div>
+
+        <div class="form-group">
+            <label>Animation Variety:</label>
+            <select id="animationStyle">
+                <option value="mixed">Mixed (Rotates through 6 different animations)</option>
+                <option value="zoomin">Zoom In (All images)</option>
+                <option value="fadeup">Fade Up (All images)</option>
+                <option value="random">Random (Each image gets random animation)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Animation Delay (ms between images):</label>
+            <input type="number" id="delayStep" min="50" max="500" value="100" placeholder="e.g., 100">
+        </div>
+
+        <div class="form-group">
+            <label>Include Large Grid Items (grid-wide class)?</label>
+            <select id="gridWidePattern">
+                <option value="every5">Every 5th image</option>
+                <option value="every6">Every 6th image</option>
+                <option value="first-last">First & Last only</option>
+                <option value="none">No large items</option>
+            </select>
+        </div>
+
+        <button onclick="generateGallery()">Generate Gallery HTML</button>
+
+        <div class="output-section" id="outputSection">
+            <h2>Generated HTML Code:</h2>
+            <p style="color: #666; font-size: 12px;">Copy this code and paste it into your gallery.html file (replace the gallery items)</p>
+            <textarea class="output" id="output" readonly></textarea>
+            <button class="copy-btn" onclick="copyToClipboard()">📋 Copy to Clipboard</button>
+            <button class="copy-btn" style="background: #28a745;" onclick="downloadCode()">⬇️ Download as .txt</button>
+        </div>
+    </div>
+
+    <script>
+        const animations = ['zoom-in', 'fade-up', 'flip-up', 'zoom-out', 'flip-left', 'bounce'];
+
+        function generateGallery() {
+            const imageCount = parseInt(document.getElementById('imageCount').value);
+            const startNum = parseInt(document.getElementById('startNum').value);
+            const imagePath = document.getElementById('imagePath').value;
+            const animationStyle = document.getElementById('animationStyle').value;
+            const delayStep = parseInt(document.getElementById('delayStep').value);
+            const gridWidePattern = document.getElementById('gridWidePattern').value;
+
+            if (imageCount < 1 || imageCount > 500) {
+                alert('Please enter a number between 1 and 500');
+                return;
+            }
+
+            let html = '<div class="gallery">\n';
+            html += '    <div class="grid-sizer"></div>\n';
+
+            for (let i = 0; i < imageCount; i++) {
+                const imgNum = startNum + i;
+                const delay = i * delayStep;
+                const animation = getAnimation(animationStyle, i);
+                const isGridWide = shouldBeGridWide(i, imageCount, gridWidePattern);
+                const gridWideClass = isGridWide ? ' grid-wide' : '';
+
+                html += `    <div class="gs-item${gridWideClass} set-bg" data-setbg="${imagePath}${imgNum}.jpg" data-aos="${animation}" data-aos-duration="800" data-aos-delay="${delay}">\n`;
+                html += `        <a href="${imagePath}${imgNum}.jpg" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>\n`;
+                html += `    </div>\n`;
+            }
+
+            html += '</div>';
+
+            document.getElementById('output').value = html;
+            document.getElementById('outputSection').classList.add('active');
+            
+            // Scroll to output
+            setTimeout(() => {
+                document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        function getAnimation(style, index) {
+            if (style === 'zoomin') return 'zoom-in';
+            if (style === 'fadeup') return 'fade-up';
+            if (style === 'random') return animations[Math.floor(Math.random() * animations.length)];
+            
+            // Mixed: rotate through animations
+            return animations[index % animations.length];
+        }
+
+        function shouldBeGridWide(index, total, pattern) {
+            if (pattern === 'every5') return (index + 1) % 5 === 0;
+            if (pattern === 'every6') return (index + 1) % 6 === 0;
+            if (pattern === 'first-last') return index === 0 || index === total - 1;
+            return false;
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById('output');
+            output.select();
+            document.execCommand('copy');
+            alert('✅ Code copied to clipboard!');
+        }
+
+        function downloadCode() {
+            const code = document.getElementById('output').value;
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(code));
+            element.setAttribute('download', 'gallery-code.txt');
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        // Generate on page load with defaults
+        window.addEventListener('load', () => {
+            generateGallery();
+        });
+    </script>
+</body>
+</html>

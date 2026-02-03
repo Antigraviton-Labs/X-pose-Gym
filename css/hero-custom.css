@@ -1,0 +1,207 @@
+/* X-Pose Gym - Hero Section Custom Styles */
+
+/* Black Fade Overlay for Transitions */
+.hero-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    z-index: 1;
+    pointer-events: none;
+    transition: background 0.4s ease;
+}
+
+.hero-section.transitioning::before {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* Initial state for animations */
+.hs-slider .hs-item .hi-text span,
+.hs-slider .hs-item .hi-text h1,
+.hs-slider .hs-item .hi-text .hero-tagline,
+.hs-slider .hs-item .hi-text .primary-btn {
+    opacity: 0;
+    transform: translateY(50px);
+}
+
+/* Centered text container */
+.hs-slider .hs-item .col-lg-8,
+.hs-slider .hs-item .col-md-10 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hs-slider .hs-item .hi-text {
+    text-align: center;
+    max-width: 800px;
+}
+
+/* Hero Tagline Styling */
+.hero-tagline {
+    font-family: "Roboto", sans-serif;
+    font-size: 17px;
+    color: #e0e0e0;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 35px;
+    line-height: 1.8;
+}
+
+/* Enhanced Text Animations - Fade In with Stagger */
+.hs-slider.owl-carousel .owl-item.active .hs-item .hi-text span.animate-in {
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.3s;
+}
+
+.hs-slider.owl-carousel .owl-item.active .hs-item .hi-text h1.animate-in {
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.5s;
+}
+
+.hs-slider.owl-carousel .owl-item.active .hs-item .hi-text .hero-tagline.animate-in {
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.7s;
+}
+
+.hs-slider.owl-carousel .owl-item.active .hs-item .hi-text .primary-btn.animate-in {
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.9s;
+}
+
+/* Fade In Up Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@-webkit-keyframes fadeInUp {
+    from {
+        opacity: 0;
+        -webkit-transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+    }
+}
+
+/* Subtle zoom effect on hero background */
+.hs-slider .hs-item.set-bg {
+    animation: zoomInOut 4s ease-in-out infinite;
+}
+
+/* Zoom In Out Animation */
+@keyframes zoomInOut {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@-webkit-keyframes zoomInOut {
+    0% { -webkit-transform: scale(1); }
+    50% { -webkit-transform: scale(1.1); }
+    100% { -webkit-transform: scale(1); }
+}
+
+/* Hero text glow effect on strong elements */
+.hs-slider .hs-item .hi-text h1 strong {
+    color: #00ff41;
+    text-shadow: 0 0 30px rgba(0, 255, 65, 0.6),
+        0 0 60px rgba(0, 255, 65, 0.3);
+}
+
+/* Enhanced button styling */
+.hi-text .primary-btn {
+    background: #00ff41;
+    color: #000000;
+    font-weight: 700;
+    border: 2px solid #00ff41;
+    transition: all 0.4s ease;
+    padding: 18px 40px;
+    font-size: 15px;
+    letter-spacing: 2px;
+}
+
+.hi-text .primary-btn:hover {
+    background: transparent;
+    color: #00ff41;
+    border-color: #00ff41;
+    box-shadow: 0 0 25px rgba(0, 255, 65, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Navigation arrows with green theme */
+.hs-slider.owl-carousel .owl-nav button {
+    transition: all 0.3s ease;
+}
+
+.hs-slider.owl-carousel .owl-nav button:hover {
+    background: rgba(0, 255, 65, 0.2);
+    color: #00ff41;
+    transform: scale(1.1);
+}
+
+/* Mobile responsive hero text */
+@media (max-width: 991px) {
+    .hs-slider .hs-item .col-lg-8,
+    .hs-slider .hs-item .col-md-10 {
+        justify-content: center;
+    }
+
+    .hs-slider .hs-item .hi-text {
+        text-align: center;
+    }
+}
+
+@media (max-width: 767px) {
+    .hs-slider .hs-item .hi-text h1 {
+        font-size: 50px;
+        line-height: 60px;
+    }
+
+    .hs-slider .hs-item .hi-text span {
+        font-size: 14px;
+        letter-spacing: 3px;
+    }
+
+    .hero-tagline {
+        font-size: 13px;
+        letter-spacing: 1px;
+    }
+
+    .hs-slider .hs-item .hi-text {
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hs-slider .hs-item .hi-text h1 {
+        font-size: 40px;
+        line-height: 50px;
+    }
+
+    .hi-text .primary-btn {
+        padding: 15px 30px;
+        font-size: 13px;
+    }
+
+    .hs-slider .hs-item .hi-text {
+        padding: 0 15px;
+    }
+}

@@ -16,4 +16,4 @@ Allow: /
 Crawl-delay: 1
 
 # Sitemap location
-Sitemap: https://xposefitness.com/sitemap.xml
+Sitemap: https://x-pose.netlify.app/sitemap.xml
